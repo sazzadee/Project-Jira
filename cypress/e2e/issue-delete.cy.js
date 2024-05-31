@@ -8,7 +8,7 @@ describe('Issue deletion', () => {
         cy.visit('/');
         cy.contains('This is an issue of type: Task.').click();
     });
-
+    //assignment 3 Test case 1
     it('Should delete the issue and not be visible anymore', () => {
         cy.get(issueDetailsModal).should('be.visible').within(() => {
             cy.get(trashIcon).should('be.visible').click();
@@ -22,7 +22,7 @@ describe('Issue deletion', () => {
 
         cy.get(backlogList).contains('This is an issue of type: Task.').should('not.exist');
     });
-
+    //Assignment 3 Test case 2
     it('Should be able to cancel issue deletion', () => {
         cy.get(issueDetailsModal).should('be.visible').within(() => {
             cy.get(trashIcon).should('be.visible').click();
