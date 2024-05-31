@@ -12,13 +12,13 @@ describe("Issue delete", () => {
   beforeEach(() => {
     openIssueDetailModal(issueTitle);
   });
-
+  //Assignment Steps: 1
   it("Should delete issue successfully", () => {
     IssueModal.clickDeleteButton();
     IssueModal.confirmDeletion();
     IssueModal.ensureIssueIsNotVisibleOnBoard(issueTitle);
   });
-
+  //Assignment Steps: 2
   it("Should cancel deletion process successfully", () => {
     IssueModal.clickDeleteButton();
     IssueModal.cancelDeletion();
