@@ -12,7 +12,7 @@ describe("Issue comments creating, editing and deleting", () => {
     const getIssueDetailsModal = () =>
         cy.get('[data-testid="modal:issue-details"]');
 
-    it("Should create a comment successfully", () => {
+    it("Should create a comment as planned", () => {
         const comment = "TEST_COMMENT";
 
         getIssueDetailsModal().within(() => {
@@ -24,9 +24,9 @@ describe("Issue comments creating, editing and deleting", () => {
         });
     });
 
-    it("Should edit a comment successfully", () => {
+    it("Should edit a comment as planned", () => {
         const previousComment = "An old silent pond...";
-        const comment = "TEST_COMMENT_EDITED";
+        const comment = "TEST_COMMENT_EDITTED_BY_SAZZAD";
 
         getIssueDetailsModal().within(() => {
             cy.get('[data-testid="issue-comment"]')
@@ -48,20 +48,23 @@ describe("Issue comments creating, editing and deleting", () => {
         });
     });
 
-    it("Should delete a comment successfully", () => {
+
+    it("Should delete a comment as planned", () => {
         getIssueDetailsModal()
             .find('[data-testid="issue-comment"]')
             .contains("Delete")
             .click();
+        cy.wait(60000)
 
         cy.get('[data-testid="modal:confirm"]')
+            .should("be.visible")
             .contains("button", "Delete comment")
-            .click()
-            .should("not.exist");
+            .click();
+        cy.wait(60000)
 
+        cy.get('[data-testid="modal:confirm"]').should("not.exist");
         getIssueDetailsModal()
             .find('[data-testid="issue-comment"]')
             .should("not.exist");
     });
 });
-
