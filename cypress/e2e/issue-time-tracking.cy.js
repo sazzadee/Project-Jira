@@ -27,6 +27,5 @@ describe("Time Estimation Tests", () => {
             .clear()
             .should("have.value", "");
         cy.get(timeDisplayClass).should("not.contain.text", "3");
-        cy.wait(60000)
     });
 });
