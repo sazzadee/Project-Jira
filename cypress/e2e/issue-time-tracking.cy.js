@@ -1,70 +1,32 @@
-describe("Issue comments creating, editing and deleting", () => {
+const siteUrl = "https://jira.ivorreic.com/";
+const issueSelector = '[data-testid="list-issue"]';
+const timeInputField = '[placeholder="Number"]';
+const timeDisplayClass = ".sc-rBLzX.irwmBe";
+
+describe("Time Estimation Tests", () => {
+    // Run before each test
     beforeEach(() => {
-        cy.visit("/");
-        cy.url()
-            .should("eq", `${Cypress.env("baseUrl")}project/board`)
-            .then((url) => {
-                cy.visit(url + "/board");
-                cy.contains("This is an issue of type: Task.").click();
-            });
+        // Visit the specified URL
+        cy.visit(siteUrl);
+        // Click on the first issue in the list
+        cy.get(issueSelector).eq(0).click();
     });
 
-    const getIssueDetailsModal = () =>
-        cy.get('[data-testid="modal:issue-details"]');
-
-    it("Should create a comment as planned", () => {
-        const comment = "TEST_COMMENT";
-
-        getIssueDetailsModal().within(() => {
-            cy.contains("Add a comment...").click();
-            cy.get('textarea[placeholder="Add a comment..."]').type(comment);
-            cy.contains("button", "Save").click().should("not.exist");
-            cy.contains("Add a comment...").should("exist");
-            cy.get('[data-testid="issue-comment"]').should("contain", comment);
-        });
-    });
-
-    it("Should edit a comment as planned", () => {
-        const previousComment = "An old silent pond...";
-        const comment = "TEST_COMMENT_EDITTED_BY_SAZZAD";
-
-        getIssueDetailsModal().within(() => {
-            cy.get('[data-testid="issue-comment"]')
-                .first()
-                .contains("Edit")
-                .click()
-                .should("not.exist");
-
-            cy.get('textarea[placeholder="Add a comment..."]')
-                .should("contain", previousComment)
-                .clear()
-                .type(comment);
-
-            cy.contains("button", "Save").click().should("not.exist");
-
-            cy.get('[data-testid="issue-comment"]')
-                .should("contain", "Edit")
-                .and("contain", comment);
-        });
-    });
-
-
-    it("Should delete a comment as planned", () => {
-        getIssueDetailsModal()
-            .find('[data-testid="issue-comment"]')
-            .contains("Delete")
-            .click();
+    it("Add, Update, and Remove Time Estimation", () => {
+        cy.get(timeInputField)
+            .clear()
+            .type("4")
+            .should("have.value", "4");
+        cy.get(timeDisplayClass).should("contain.text", "4");
+        cy.get(timeInputField)
+            .clear()
+            .type("3")
+            .should("have.value", "3");
+        cy.get(timeDisplayClass).should("contain.text", "3");
+        cy.get(timeInputField)
+            .clear()
+            .should("have.value", "");
+        cy.get(timeDisplayClass).should("not.contain.text", "3");
         cy.wait(60000)
-
-        cy.get('[data-testid="modal:confirm"]')
-            .should("be.visible")
-            .contains("button", "Delete comment")
-            .click();
-        cy.wait(60000)
-
-        cy.get('[data-testid="modal:confirm"]').should("not.exist");
-        getIssueDetailsModal()
-            .find('[data-testid="issue-comment"]')
-            .should("not.exist");
     });
 });
